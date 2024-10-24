@@ -1,0 +1,16 @@
+# docker-compose.yml
+version: '3'
+services:
+  server:
+    build: ./server
+    ports:
+      - "3035:3035"
+    env_file:
+      - ./server/.env
+
+  client:
+    build: ./client
+    ports:
+      - "8080:80"
+    depends_on:
+      - server

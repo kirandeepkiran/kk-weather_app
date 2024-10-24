@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Kiran's USA weather app</title>
+    <meta charset="UTF-8">
+    <meta name="viewpoint" content="width=device-width, initial-scale=1.0">
+    <style>
+      body {  text-align: center; margin-top: 100px; }
+      input { padding: 10px; font-size: 16px; }
+      button { padding: 10px; font-size: 16px; cursor: pointer; }
+      #weather-info { margin-top: 20px; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+  </head>
+<body>
+  <h1>USA Weather App</h1>
+  <p style="font-size: 20px;">Enter US Postal Code:-</p>
+  <input type="text" placeholder="Enter USA Postal Code" id="postal_code">
+  <button onclick="getWeather()">Get Weather</button>
+  <div id="weather-info"></div>
+</body>
+
+<script>
+function getWeather(){
+  const zip = document.getElementById('postal_code').value;
+  axios.post('http://localhost:3035/weather', { zip })
+          .then(response => {
+            console.log(response.data);
+            const data = response.data;
+            if (data) {
+              console.log("Hi");
+      document.getElementById('weather-info').innerHTML = `
+            <h3>Weather in ${data.city.name}</h3>
+            <p>Temperature: ${data.list[0].main.temp}°F</p>
+            <p>Weather: ${data.list[0].weather[0].description}</p>
+      `;
+    } else {
+      document.getElementById('weather-info').innerHTML = `<p>Error: ${data.message || 'Error fetching weather data - 1'}</p>`;
+    }
+  })
+  .catch(() => {
+    document.getElementById('weather-info').innerHTML = `<p>Error fetching weather data - 2</p>`;
+  });
+}
+
+</script>
+</html>
